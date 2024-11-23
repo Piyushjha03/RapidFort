@@ -1,0 +1,19 @@
+{
+  "name": "filemetadata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bull": "^4.16.4",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "^6.11.0",
+    "office-document-properties": "^1.1.0"
+  }
+}

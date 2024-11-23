@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  client:
+    build:
+      context: ./client
+    container_name: client
+    ports:
+      - "5173:80" # Map localhost:3000 to Nginx's default port (80)
+    depends_on:
+      - file-upload
+      - file-conversion
+      - file-metadata
+      - file-download
+    environment:
+      REACT_APP_API_BASE_URL : http://localhost:8080 # API Gateway or Backend Base URL
+
+  file-upload:
+    build:
+      context: ./services/fileUpload
+    container_name: file-upload-service
+    ports:
+      - "3001:3001"
+    environment:
+       - ./services/fileUpload/.env
+    depends_on:
+      - redis
+      - mongo
+
+  file-conversion:
+    build:
+      context: ./services/fileConversion
+    container_name: file-conversion-service
+    ports:
+      - "3003:3003"
+    environment:
+        - ./services/fileConversion/.env
+    depends_on:
+      - redis
+      - mongo
+
+  file-metadata:
+    build:
+      context: ./services/fileMetadata
+    container_name: file-metadata-service
+    ports:
+      - "3002:3002"
+    environment:
+       - ./services/fileMetadata/.env
+    depends_on:
+      - redis
+      - mongo
+
+  file-download:
+    build:
+      context: ./services/fileDownload
+    container_name: file-download-service
+    ports:
+      - "3004:3004"
+    environment:
+       - ./services/fileDownload/.env
+    depends_on:
+      - redis
+      - mongo
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"

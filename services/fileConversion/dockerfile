@@ -1,0 +1,26 @@
+# Use an official Node.js runtime as the base image
+FROM node:18
+
+# Install LibreOffice
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3003
+
+# Set the default command to start the application
+CMD ["node", "index.js"]
